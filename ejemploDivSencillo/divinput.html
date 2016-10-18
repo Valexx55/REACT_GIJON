@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://npmcdn.com/react@15.3.1/dist/react.js"></script>
+<script src="https://npmcdn.com/react-dom@15.3.1/dist/react-dom.js"></script>
+<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+</head>
+<body>
+
+  <div id="container">
+	<script type="text/babel">
+
+var MyLong = React.createClass({
+		
+		
+  		render: function() //MÉTODO OBLIGATORIO
+		{
+
+    		return ( 
+			
+			<input type = "text" value={this.props.longuitud}/>
+			
+			);
+	  	}
+		
+	});
+
+var MyInputButton = React.createClass ({
+
+		getInitialState: function() 
+		{
+    			return {nombre: this.props.nombre};
+  		}
+		,
+		
+		botonTocado: function () 
+		{ 
+			this.props.cambio(this.state.nombre); 
+		},
+
+		nombreCambiado : function(ev) 
+		{
+			this.setState({nombre:ev.target.value});
+	
+		},	
+		
+  		render: function() //MÉTODO OBLIGATORIO
+		{
+
+    		return ( 
+			<div>
+				<input type = "text" id="name" value={this.state.nombre} onChange={this.nombreCambiado}/>
+				<input type = "button" value="Dale" onClick={this.botonTocado} />
+			</div>
+			);
+	  	}
+		
+	});
+
+
+var MyDiv = React.createClass({
+		
+		getInitialState: function() 
+		{
+    			return {nombre: '', longuitud: 0};
+  		},
+		
+
+		funcambio : function(nuevonombre) 
+		{
+			var nuevalong = nuevonombre.length;
+			this.setState({nombre:nuevonombre, longuitud:nuevalong});
+	
+		},	
+		
+  		render: function() //MÉTODO OBLIGATORIO
+		{
+
+    		return ( 
+			<div>
+				
+				<MyInputButton nombre={this.state.nombre} cambio={this.funcambio}/>
+				<MyLong longuitud={this.state.longuitud}/>
+			</div>
+			);
+	  	}
+		
+	});
+
+ReactDOM.render( 
+  <MyDiv />,
+  document.getElementById('container')
+);
+
+</script>
+  </div>
+</body>
+</html>

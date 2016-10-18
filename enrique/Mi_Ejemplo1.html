@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://npmcdn.com/react@15.3.1/dist/react.js"></script>
+<script src="https://npmcdn.com/react-dom@15.3.1/dist/react-dom.js"></script>
+<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+
+<script>
+
+
+var DivClass = React.createClass({
+	  displayName: 'DivClass',
+
+	  render: function render() {
+	    return createDivElement();		
+	  }
+	});
+
+createDivElement = function() {
+      console.log("createDivElement");
+	  return React.createElement(
+		  'div',
+		  null,
+		  createPElement()
+		);
+}
+
+createPElement = function() {
+     console.log("createPElement");
+    return React.createElement('p', {id:3}, createInputElement());
+}
+
+createInputElement = function() {
+   console.log("createInputElement");
+   return React.createElement('input', {type:'text'}, null);
+}
+
+
+paint = function () {
+   console.log("paint");	
+   ReactDOM.render(React.createElement(DivClass), document.getElementById('anclaje-div'));
+};
+
+
+</script>
+
+
+
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+</head>
+
+<body>
+  Ejemplo 1: <br>
+  <div id="anclaje-div">
+      <script>
+         paint();
+	   </script>
+      
+  
+  </div>
+</body>
+</html>

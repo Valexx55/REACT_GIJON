@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://npmcdn.com/react@15.3.1/dist/react.js"></script>
+<script src="https://npmcdn.com/react-dom@15.3.1/dist/react-dom.js"></script>
+<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+</head>
+<body>
+
+  <div id="container">
+	<script type="text/babel">
+class LikeButton extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      liked: false
+    };
+    this.handleClick = this.handleClick.bind(this);
+  }
+  handleClick() {
+    this.setState({liked: !this.state.liked});
+  }
+  render() {
+    const text = this.state.liked ? 'liked' : 'haven\'t liked';
+    return (
+      <div onClick={this.handleClick}>
+        You {text} this. Click to toggle.
+      </div>
+    );
+  }
+}
+
+ReactDOM.render( //La nueva FORMA de hacerlo
+  <LikeButton />,
+  document.getElementById('container')
+);
+
+</script>
+  </div>
+</body>
+</html>

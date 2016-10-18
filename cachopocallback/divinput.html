@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://npmcdn.com/react@15.3.1/dist/react.js"></script>
+  <script src="https://npmcdn.com/react-dom@15.3.1/dist/react-dom.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+  <script src="https://code.jquery.com/jquery.min.js"></script>
+  
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+</head>
+<body>
+
+  <div id="container">
+  </div>
+	<script type="text/babel">
+
+//http://reactindragijon-ebtm.rhcloud.com/JsonPalabra
+var MyDiv = React.createClass({
+  loadCommentsFromServer: function() {
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  handleCommentSubmit: function(comment) {
+    var comments = this.state.data;
+   
+    var newComments = comments.concat([comment]);
+    this.setState({data: newComments});
+    $.ajax({
+      url: this.props.url,
+      //dataType: 'json',
+      type: 'POST',
+      data: comment,
+      dataType: 'text',
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        this.setState({data: comments});
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  getInitialState: function() {
+    return {data: []};
+  },
+  componentDidMount: function() {
+    this.loadCommentsFromServer();
+    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+  },
+  render: function() {
+    return (
+      <div className="myDiv">
+        <h1>Palabras Introducidas</h1>
+       <ParoleList data={this.state.data} />
+       <FormularioPalabra onCommentSubmit={this.handleCommentSubmit} />
+      </div>
+    );
+  }
+});
+
+var ParoleList = React.createClass({
+  render: function() {
+    var listaPalabras = this.props.data.map(function(palabra, i) {
+      return (
+        <div key={i}>
+          {palabra.valor}
+        </div>
+      );
+    });
+    return (
+      <div className="paroleList">
+        {listaPalabras}
+      </div>
+    );
+  }
+});
+
+var FormularioPalabra = React.createClass({
+  getInitialState: function() {
+    return {palabra: ''};
+  },
+  cambioPalabra: function(e) {
+    this.setState({palabra: e.target.value});
+  },
+
+  botonPalabraNueva: function(e) {
+    e.preventDefault();
+    var palabra_nueva = this.state.palabra.trim();
+    this.props.onCommentSubmit(palabra_nueva);
+    this.setState({palabra: ''});
+  },
+  render: function() {
+    return (
+      <form className="formularioPalabra" onSubmit={this.botonPalabraNueva}>
+        <input
+          type="text"
+          placeholder="Palabra"
+          value={this.state.palabra}
+          onChange={this.cambioPalabra}
+        />
+        <input type="submit" value="Post" />
+      </form>
+    );
+  }
+});
+
+ReactDOM.render(
+  <MyDiv url="http://reactindragijon-ebtm.rhcloud.com/JsonPalabra" pollInterval={2000} />,
+  document.getElementById('container')
+);
+
+</script>
+</body>
+</html>
